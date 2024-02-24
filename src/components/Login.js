@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header';
 import { checkValidData } from '../utils/validate';
-import { paste } from '@testing-library/user-event/dist/paste';
 
 
 const Login = () =>{
@@ -19,7 +18,6 @@ const Login = () =>{
     const handleButtonClick = () =>{
         // Validate form data
         const message = checkValidData(email.current.value, password.current.value);
-        console.log(message);
         setErrorMessage(message);
     }
 
