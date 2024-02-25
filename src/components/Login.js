@@ -2,21 +2,37 @@ import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import { checkValidData } from '../utils/validate';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../utils/firebase';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/userSlice';
 
 
 const Login = () => {
 
-    
+
     const email = useRef(null);
     const password = useRef(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [isSignInForm, setIsSignInForm] = useState(true);
     const [errorMessage, setErrorMessage] = useState(null);
 
+    function updateProfileHandler(user) {
+
+        updateProfile(user, {
+            displayName: user.current.value, photoURL: "https://avatars.githubusercontent.com/u/50500905?s=400&u=9f954e57ace556d3451f14c2dc18ae34a0693056&v=4"
+        }).then(() => {
+            const {uid, email, displayName, photoURL} = auth.currentUser;
+            dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL: photoURL}));
+            navigate("/browse");
+        }).catch((error) => {
+            // An error occurred
+            // ...
+            setErrorMessage(error.message);
+        });
+    }
 
     const toggleSignInForm = () => {
         setIsSignInForm(!isSignInForm);
@@ -35,8 +51,8 @@ const Login = () => {
                 .then((userCredential) => {
                     // Signed up 
                     const user = userCredential.user;
+                    updateProfileHandler(user);
                     console.log(user);
-                    navigate("/browse");
                 })
                 .catch((error) => {
                     const errorCode = error.code;
