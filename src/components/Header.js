@@ -16,14 +16,13 @@ const Header = () => {
 
   const handleSignOutButton = () =>{
     signOut(auth).then(() => {
-      navigate("/");
     }).catch((error) => {
       navigate("/error");
     });
   }
 
   useEffect(()=>{
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const {uid, email, displayName, photoURL} = user;
         dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL: photoURL}));
@@ -34,6 +33,7 @@ const Header = () => {
       }
     });
 
+    return () => unsubscribe();
   }, []);
 
   return (

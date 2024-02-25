@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import { checkValidData } from '../utils/validate';
 import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
@@ -10,10 +9,8 @@ import { addUser } from '../utils/userSlice';
 
 const Login = () => {
 
-
     const email = useRef(null);
     const password = useRef(null);
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [isSignInForm, setIsSignInForm] = useState(true);
@@ -27,8 +24,6 @@ const Login = () => {
             const {uid, email, displayName, photoURL} = auth.currentUser;
             dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL: photoURL}));
         }).catch((error) => {
-            // An error occurred
-            // ...
             setErrorMessage(error.message);
         });
     }
