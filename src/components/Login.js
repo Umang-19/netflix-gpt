@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPasswo
 import { auth } from '../utils/firebase';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
+import { BLUE_AVATAR } from '../utils/constants';
 
 
 const Login = () => {
@@ -19,7 +20,7 @@ const Login = () => {
     function updateProfileHandler(user) {
 
         updateProfile(user, {
-            displayName: user.current.value, photoURL: "https://avatars.githubusercontent.com/u/50500905?s=400&u=9f954e57ace556d3451f14c2dc18ae34a0693056&v=4"
+            displayName: user.current.value, photoURL: BLUE_AVATAR
         }).then(() => {
             const {uid, email, displayName, photoURL} = auth.currentUser;
             dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL: photoURL}));
